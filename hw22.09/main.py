@@ -2,16 +2,15 @@ from threading import Thread, Lock
 import random
 import time
 
-def measure_function_time(function, *agrs, **kwargs):
+def measure_function_time(function):
     def inner(*agrs, **kwargs):
         start = time.time()
         result = function(*agrs, **kwargs)
         end = time.time()
         print(f"Time: {end - start}s")
         return result
-    
     return inner
-
+    
 class Number1:
     def __init__(self):
         self.__number = float()
@@ -22,13 +21,17 @@ class Number1:
     
     def set_number(self, value):
         self.lock.acquire()
-        self.__number = value
-        self.lock.release()
+        try:
+            self.__number = value
+        finally:
+            self.lock.release()
     
     def increase_number(self, value):
         self.lock.acquire()
-        self.__number += value
-        self.lock.release()
+        try:
+            self.__number += value
+        finally:
+            self.lock.release()
 
 class Number2:
     def __init__(self):
@@ -40,13 +43,17 @@ class Number2:
     
     def set_number(self, value):
         self.lock.acquire()
-        self.__number = value
-        self.lock.release()
+        try:
+            self.__number = value
+        finally:
+            self.lock.release()
     
     def increase_number(self, value):
         self.lock.acquire()
-        self.__number += value
-        self.lock.release()
+        try:
+            self.__number += value
+        finally:
+            self.lock.release()
 
 def increase1(number1, number2):
     for _ in range(random.randint(10000, 20000)):
