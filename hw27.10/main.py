@@ -7,10 +7,8 @@ def main():
     my_rank = comm.Get_rank()
     if(my_rank == 0):
         main_proc.start(comm)
-        main_proc.end()
     else:
         calc_proc.start(comm)
-        calc_proc.end()
     
 
 main()
